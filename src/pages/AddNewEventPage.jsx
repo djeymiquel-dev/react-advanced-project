@@ -1,58 +1,81 @@
-import { Button, Center, Flex, Heading, Input, Stack } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Flex,
+  Heading,
+  Input,
+  Stack,
+  Textarea,
+  Image,
+} from "@chakra-ui/react";
+import {
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectRoot,
+  SelectTrigger,
+  SelectValueText,
+} from "../components/ui/select";
+import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
-import { useCategory } from "../context/CategoryContext";
-
-// export const addEventLoader = async () => {
-//   const events = await fetch(`http://localhost:3000/events`);
-
-//   return { events: await events.json() };
-// };
+import { Field } from "../components/ui/field";
+import { CategoryContext } from "../context/CategoryContext";
+import { UserContext } from "../context/UserContext";
+import { SelectUserComponent } from "../components/SelectUserComponent";
 
 export const AddNewEventPage = () => {
+  const { categories } = useContext(CategoryContext);
+  const { users } = useContext(UserContext);
+  const [selectedCatogoryIds, setSelectedCategoryIds] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategoryIds((prev) => {
+      // Controleer of de ID al is geselecteerd
+      if (prev.includes(categoryId)) {
+        return prev.filter((id) => id !== categoryId); // Verwijder als het al geselecteerd is
+      } else {
+        return [...prev, categoryId]; // Voeg toe als het nog niet is geselecteerd
+      }
+    });
+  };
+
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
-    formState: { errors, isSubmitting },
+    watch,
+    formState: { errors },
   } = useForm();
-  const { categoryName } = useCategory();
-  const categoryNames = categoryName();
+  const imageUrl = watch("image");
 
-  // console.log(categoryIds);
-
+  // Maak een JSON-object van het formulier
   const onSubmit = async (data) => {
     try {
-      // Maak een JSON-object van het formulier
-      const payload = {
+      const formData = {
+        createdBy: selectedUserId,
         title: data.title,
         description: data.description,
-        image: data.image, // Zorg dat dit een URL is
-        categoryIds: data.categoryIds.map(Number), // Zorg dat de waarden integers zijn
+        image: data.image,
+        categoryIds: selectedCatogoryIds,
         location: data.location,
-        startTime: new Date(data.startTime).toISOString(), // Converteer naar ISO-string
-        endTime: new Date(data.endTime).toISOString(), // Converteer naar ISO-string
+        startTime: new Date(data.startTime).toISOString(),
+        endTime: new Date(data.endTime).toISOString(),
       };
-
-      console.log(data.startTime);
-
       const response = await fetch("http://localhost:3000/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formData),
       });
-
       if (!response.ok) {
         throw new Error("Failed to submit event");
       }
-
       console.log("Event successfully submitted!");
     } catch (error) {
       console.error("Something went wrong:", error.message);
     }
-    // reset de form na submitting
     reset();
   };
 
@@ -62,58 +85,118 @@ export const AddNewEventPage = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex flexDir={"column"} p={4} bg={"purple.300"} mt={10} gap={4}>
           <Stack gap={4}>
-            <input {...register("title")} placeholder="event name" />
+            <SelectUserComponent
+              users={users}
+              setSelectedUserId={setSelectedUserId}
+            />
 
-            <textarea
+            <Input
+              {...register("title", { required: "Title is required" })}
+              placeholder="event name..."
+              variant={"filled"}
+              p={2}
+            />
+            {errors.title && <p>{errors.title.message}</p>}
+
+            <Textarea
               {...register("description")}
-              placeholder="description"
+              placeholder="description..."
               rows={4}
               cols={50}
+              variant={"subtle"}
+              p={2}
             />
 
-            <input
+            <Input
               type="url"
-              {...register("image")}
-              placeholder="enter image url"
+              {...register("image", {
+                required: "Image URL is required",
+                pattern: {
+                  value: /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i,
+                  message: "Please enter a valid URL",
+                },
+              })}
+              placeholder="Enter image URL..."
+              variant="filled"
+              p={2}
             />
+            {/* Validatiefouten weergeven */}
+            {errors.image && (
+              <p style={{ color: "red" }}>{errors.image.message}</p>
+            )}
 
-            <h3>Choose a Category</h3>
-            {categoryNames.map((category, index) => (
-              <div key={index}>
-                <label>
-                  <input
-                    type="checkbox"
-                    value={index + 1}
-                    {...register("categoryIds")}
-                  />
-                  {category}
-                </label>
+            {/* Optionele afbeelding preview */}
+            {imageUrl && (
+              <div style={{ marginTop: "10px" }}>
+                <Image
+                  src={imageUrl}
+                  alt="Preview"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "200px",
+                    objectFit: "contain",
+                    border: "1px solid #ccc",
+                  }}
+                />
               </div>
-            ))}
+            )}
 
-            <input
-              {...register("location")}
-              type="text"
-              placeholder="location"
-            />
+            <SelectRoot
+              multiple
+              size="sm"
+              variant={"filled"}
+              bg={"black"}
+              borderRadius={4}
+            >
+              <SelectLabel bg={"green"} borderRadius={4} p={2}>
+                Select 1 or more{" "}
+              </SelectLabel>
+              <SelectTrigger>
+                <SelectValueText placeholder={"Category"} color={"white"} />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem
+                    key={category.id}
+                    item={category.name}
+                    selected={selectedCatogoryIds.includes(category.id)}
+                    onClick={() => handleCategoryChange(category.id)}
+                  >
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </SelectRoot>
 
-            <label htmlFor="startTime">Choose a starting time</label>
-            <Input
-              {...register("startTime")}
-              type="datetime-local"
-              name="datetime"
-              id="startTime"
-              onChange={(e) => setValue("startTime", e.target.value)}
-            />
+            <Field>
+              <Input
+                {...register("location")}
+                type="text"
+                placeholder="location"
+                variant={"filled"}
+              />
+            </Field>
 
-            <label htmlFor="endTime">Choose a end time</label>
-            <Input
-              {...register("endTime")}
-              type="datetime-local"
-              name="datetime"
-              id="endTime"
-              onChange={(e) => setValue("endTime", e.target.value)}
-            />
+            <Flex gap={2}>
+              <Field label="Starttime">
+                <Input
+                  id="startTime"
+                  type="datetime-local"
+                  {...register("startTime", { required: true })}
+                  variant={"filled"}
+                />
+              </Field>
+
+              <Field label="Endtime">
+                <Input
+                  id="endTime"
+                  type="datetime-local"
+                  {...register("endTime", { required: true })}
+                  variant={"filled"}
+                />
+              </Field>
+            </Flex>
+
             <Button type="submit">Submit</Button>
           </Stack>
         </Flex>

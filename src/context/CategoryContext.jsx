@@ -13,7 +13,7 @@ export const CategoryContextProvider = ({ children }) => {
   };
 
   const categoryName = () => {
-    return categories.map((category) => category.name);
+    return categories;
   };
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const CategoryContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <CategoryContext.Provider value={{ categoryId, categoryName }}>
+    <CategoryContext.Provider value={{ categories, categoryId, categoryName }}>
       {children}
     </CategoryContext.Provider>
   );

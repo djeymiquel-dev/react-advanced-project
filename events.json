@@ -34,6 +34,7 @@
       "startTime": "2023-04-06T18:46",
       "endTime": "2023-04-06T17:46"
     },
+
     {
       "id": 3,
       "createdBy": 2,
@@ -55,9 +56,6 @@
       "location": "Shavasana Yoga School",
       "startTime": "2023-03-09T06:00:00.000Z",
       "endTime": "2023-03-09T07:00:00.000Z"
-    },
-    {
-      "id": 5
     }
   ],
   "categories": [
@@ -75,4 +73,3 @@
     }
   ]
 }
-
