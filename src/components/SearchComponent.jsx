@@ -1,12 +1,11 @@
 import { Flex, Input } from "@chakra-ui/react";
 
-export const SearchComponent = ({ clickFn }) => {
+export const SearchComponent = ({ clickFn, ...props }) => {
   // const value = undefined.property; // dit produceert een error om de errorBoundary te testen
 
   return (
     <Flex justifyContent={"center"}>
       <Input
-        w={"md"}
         type="text"
         color={"blackAlpha.800"}
         variant={"subtle"}
@@ -17,6 +16,7 @@ export const SearchComponent = ({ clickFn }) => {
         _focus={{
           bgColor: "gray.200", // Achtergrondkleur bij focus
         }}
+        {...props}
       />
     </Flex>
   );

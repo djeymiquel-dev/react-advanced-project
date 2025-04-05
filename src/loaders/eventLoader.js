@@ -1,7 +1,7 @@
-export const postLoader = async () => {
-  const events = await fetch(`http://localhost:3000/events`);
-  if (!events.ok) {
-    throw new Error("Failed to fetch data");
+export const eventLoader = async () => {
+  const response = await fetch(`http://localhost:3000/events`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch data", { status: response.status });
   }
-  return await events.json();
+  return await response.json();
 };

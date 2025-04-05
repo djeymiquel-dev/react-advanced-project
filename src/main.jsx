@@ -2,15 +2,15 @@ import { Provider } from "./components/ui/provider";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { EventPage } from "./pages/EventPage";
-import { EventsPage, postListLoader } from "./pages/EventsPage";
+import { EventsPage } from "./pages/EventsPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Root } from "./components/Root";
-import { AddNewEventPage } from "./pages/AddNewEventPage";
-import { addEventLoader } from "./loaders/addEventLoader";
-import { postLoader } from "./loaders/eventLoader";
+import { AddNewEvent } from "./pages/AddNewEvent";
+import { eventLoader } from "./loaders/eventLoader";
 import { CategoryContextProvider } from "./context/CategoryContext";
 import { UserContextProvider } from "./context/UserContext";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { updateEvent, createEvent, deleteEvent } from "./actions/eventActions";
 
 const router = createBrowserRouter([
   {
@@ -25,23 +25,31 @@ const router = createBrowserRouter([
             <EventsPage />
           </ErrorBoundary>
         ),
-        loader: postListLoader,
+        loader: eventLoader,
       },
+
       {
         path: "/add-new-event",
         element: (
           <ErrorBoundary fallback={"er gaat iets mis"}>
-            <AddNewEventPage />
+            <AddNewEvent />
           </ErrorBoundary>
         ),
-        loader: addEventLoader,
+        loader: eventLoader,
+        action: createEvent,
       },
+
       {
         path: "/event/:eventId",
         element: <EventPage />,
-
-        loader: postLoader,
-        // action: addComment,
+        loader: eventLoader,
+        action: updateEvent,
+        children: [
+          {
+            path: "delete",
+            action: deleteEvent,
+          },
+        ],
       },
     ],
   },

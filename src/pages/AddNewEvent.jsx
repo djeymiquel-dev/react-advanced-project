@@ -22,12 +22,14 @@ import { Field } from "../components/ui/field";
 import { CategoryContext } from "../context/CategoryContext";
 import { UserContext } from "../context/UserContext";
 import { SelectUserComponent } from "../components/SelectUserComponent";
+import { useSubmit } from "react-router-dom";
 
-export const AddNewEventPage = () => {
+export const AddNewEvent = () => {
   const { categories } = useContext(CategoryContext);
   const { users } = useContext(UserContext);
   const [selectedCatogoryIds, setSelectedCategoryIds] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const submit = useSubmit();
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategoryIds((prev) => {
@@ -51,31 +53,20 @@ export const AddNewEventPage = () => {
 
   // Maak een JSON-object van het formulier
   const onSubmit = async (data) => {
-    try {
-      const formData = {
-        createdBy: selectedUserId,
-        title: data.title,
-        description: data.description,
-        image: data.image,
-        categoryIds: selectedCatogoryIds,
-        location: data.location,
-        startTime: new Date(data.startTime).toISOString(),
-        endTime: new Date(data.endTime).toISOString(),
-      };
-      const response = await fetch("http://localhost:3000/events", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to submit event");
-      }
-      console.log("Event successfully submitted!");
-    } catch (error) {
-      console.error("Something went wrong:", error.message);
-    }
+    const formData = new FormData();
+    formData.append("createdBy", selectedUserId);
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("image", data.image);
+    formData.append("categoryIds", JSON.stringify(selectedCatogoryIds));
+    formData.append("location", data.location);
+    formData.append("startTime", data.startTime);
+    formData.append("endTime", data.endTime);
+
+    submit(formData, {
+      method: "POST",
+    });
+
     reset();
   };
 
@@ -83,7 +74,15 @@ export const AddNewEventPage = () => {
     <Center flexDir={"column"}>
       <Heading>Add New Event</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Flex flexDir={"column"} p={4} bg={"purple.300"} mt={10} gap={4}>
+        <Flex
+          flexDir={"column"}
+          p={4}
+          bg={"purple.300"}
+          mt={10}
+          gap={4}
+          w={["xs", "md"]}
+          borderRadius={10}
+        >
           <Stack gap={4}>
             <SelectUserComponent
               users={users}
@@ -91,7 +90,7 @@ export const AddNewEventPage = () => {
             />
 
             <Input
-              {...register("title", { required: "Title is required" })}
+              {...register("title")}
               placeholder="event name..."
               variant={"filled"}
               p={2}
@@ -110,7 +109,6 @@ export const AddNewEventPage = () => {
             <Input
               type="url"
               {...register("image", {
-                required: "Image URL is required",
                 pattern: {
                   value: /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i,
                   message: "Please enter a valid URL",
@@ -177,7 +175,7 @@ export const AddNewEventPage = () => {
               />
             </Field>
 
-            <Flex gap={2}>
+            <Flex gap={2} display={["block", "flex"]}>
               <Field label="Starttime">
                 <Input
                   id="startTime"

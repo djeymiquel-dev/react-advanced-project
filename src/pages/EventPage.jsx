@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -20,15 +19,17 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { CategoryContext } from "../context/CategoryContext";
 import { Tag } from "../components/ui/tag";
+import { EditEvent } from "../components/EditEvent";
+import { DeleteEvent } from "../components/DeleteEvent";
 
 export const EventPage = () => {
   const events = useLoaderData();
+  console.log(events);
   const { categories } = useContext(CategoryContext);
   const { eventId } = useParams();
+  console.log(eventId);
   const event = events.find((e) => e.id.toString() === eventId.toString());
   const { users } = useContext(UserContext);
-  console.log(categories);
-  console.log(typeof event.categoryIds);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -46,7 +47,7 @@ export const EventPage = () => {
   return (
     <>
       <Center minHeight={"100vh"}>
-        <Card.Root w={"3xl"}>
+        <Card.Root w={"2xl"}>
           <CardHeader>
             <Image
               src={event.image}
@@ -59,15 +60,15 @@ export const EventPage = () => {
             <Stack gap={4}>
               {users.map((user) =>
                 user.id === event.createdBy ? (
-                  <>
+                  <Box key={user.id}>
                     <Image
                       type={"url"}
                       src={user.image}
                       borderRadius={"full"}
                       boxSize={20}
                     />
-                    <Box key={user.id}>{user.name}</Box>
-                  </>
+                    <Text>{user.name}</Text>
+                  </Box>
                 ) : null
               )}
               <Heading size={"5xl"}>{event.title}</Heading>
@@ -86,8 +87,8 @@ export const EventPage = () => {
             </Stack>
           </CardBody>
           <CardFooter>
-            <Button>Edit Event</Button>
-            <Button>Delete Event</Button>
+            <EditEvent event={event} />
+            <DeleteEvent event={event} />
           </CardFooter>
         </Card.Root>
       </Center>
