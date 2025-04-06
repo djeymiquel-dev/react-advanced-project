@@ -22,14 +22,16 @@ import { Field } from "../components/ui/field";
 import { CategoryContext } from "../context/CategoryContext";
 import { UserContext } from "../context/UserContext";
 import { SelectUserComponent } from "../components/SelectUserComponent";
-import { useSubmit } from "react-router-dom";
+import { useNavigate, useNavigation, useRevalidator } from "react-router-dom";
 
 export const AddNewEvent = () => {
   const { categories } = useContext(CategoryContext);
   const { users } = useContext(UserContext);
-  const [selectedCatogoryIds, setSelectedCategoryIds] = useState([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const submit = useSubmit();
+  const navigate = useNavigate();
+  const navigation = useNavigation();
+  const revalidator = useRevalidator();
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategoryIds((prev) => {
@@ -45,7 +47,6 @@ export const AddNewEvent = () => {
   const {
     register,
     handleSubmit,
-    reset,
     watch,
     formState: { errors },
   } = useForm();
@@ -53,21 +54,43 @@ export const AddNewEvent = () => {
 
   // Maak een JSON-object van het formulier
   const onSubmit = async (data) => {
-    const formData = new FormData();
-    formData.append("createdBy", selectedUserId);
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("image", data.image);
-    formData.append("categoryIds", JSON.stringify(selectedCatogoryIds));
-    formData.append("location", data.location);
-    formData.append("startTime", data.startTime);
-    formData.append("endTime", data.endTime);
+    if (!selectedUserId) {
+      alert("Please select a user");
+      return;
+    }
 
-    submit(formData, {
-      method: "POST",
-    });
+    const newEvent = {
+      createdBy: parseInt(selectedUserId),
+      title: data.title,
+      description: data.description,
+      image: data.image,
+      categoryIds: selectedCategoryIds,
+      location: data.location,
+      startTime: new Date(data.startTime).toISOString(),
+      endTime: new Date(data.endTime).toISOString(),
+    };
 
-    reset();
+    try {
+      const response = await fetch("http://localhost:3000/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newEvent),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create event");
+      }
+
+      // Force a refresh of the data
+      revalidator.revalidate();
+
+      // Navigate to home page
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -157,7 +180,7 @@ export const AddNewEvent = () => {
                   <SelectItem
                     key={category.id}
                     item={category.name}
-                    selected={selectedCatogoryIds.includes(category.id)}
+                    selected={selectedCategoryIds.includes(category.id)}
                     onClick={() => handleCategoryChange(category.id)}
                   >
                     {category.name}
@@ -195,7 +218,9 @@ export const AddNewEvent = () => {
               </Field>
             </Flex>
 
-            <Button type="submit">Submit</Button>
+            <Button type="submit" isLoading={navigation.state === "submitting"}>
+              Submit
+            </Button>
           </Stack>
         </Flex>
       </form>

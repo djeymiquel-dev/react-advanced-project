@@ -29,7 +29,7 @@ export const createEvent = async ({ request }) => {
   const formData = await request.formData();
 
   const newEvent = {
-    createdBy: formData.get("createdBy"),
+    createdBy: parseInt(formData.get("userId")),
     title: formData.get("title"),
     description: formData.get("description"),
     image: formData.get("image"),

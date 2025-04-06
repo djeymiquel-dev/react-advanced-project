@@ -11,7 +11,7 @@ export const SelectUserComponent = ({ users, setSelectedUserId }) => {
   const [selectedUserName, setSelectedUserName] = useState("");
 
   const handleUserChange = (userId, userName) => {
-    setSelectedUserId(userId); // Update de geselecteerde userId
+    setSelectedUserId(userId);
     setSelectedUserName(userName);
   };
 
@@ -25,8 +25,8 @@ export const SelectUserComponent = ({ users, setSelectedUserId }) => {
         {users.map((user) => (
           <SelectItem
             key={user.id}
-            item={user.name}
-            onClick={() => handleUserChange(user.id)}
+            value={user.name}
+            onClick={() => handleUserChange(user.id, user.name)}
           >
             {user.name}
           </SelectItem>

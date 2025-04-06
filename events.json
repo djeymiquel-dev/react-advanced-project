@@ -66,16 +66,16 @@
       "endTime": "2023-03-09T07:00:00.000Z"
     },
     {
-      "createdBy": "null",
+      "createdBy": 1,
       "title": "Dit is een nieuwe event",
-      "description": "Welkom in de it",
-      "image": "https://di3xp7dfi3cq.cloudfront.net/media/magefan_blog/hidden-boom-in-tech-industry.jpeg",
+      "description": "wat gaan we doen vandaag of morgen",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYFYUMxwjoJUgk-Bv9mwUGhi6uhAIKOfWZHw&s",
       "categoryIds": [
-        3
+        1
       ],
       "location": "Amsterdam",
-      "startTime": "2025-04-10T19:52:00.000Z",
-      "endTime": "2025-04-11T19:52:00.000Z",
+      "startTime": "2025-04-10T15:15:00.000Z",
+      "endTime": "2025-04-11T15:15:00.000Z",
       "id": 5
     }
   ],

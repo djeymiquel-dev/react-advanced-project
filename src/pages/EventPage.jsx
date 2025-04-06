@@ -24,18 +24,15 @@ import { DeleteEvent } from "../components/DeleteEvent";
 
 export const EventPage = () => {
   const events = useLoaderData();
-  console.log(events);
-  const { categories } = useContext(CategoryContext);
   const { eventId } = useParams();
-  console.log(eventId);
-  const event = events.find((e) => e.id.toString() === eventId.toString());
+  const { categories } = useContext(CategoryContext);
   const { users } = useContext(UserContext);
+  const event = events.find((e) => e.id.toString() === eventId.toString());
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
 
-  // Als het event niet wordt gevonden
   if (!event) {
     return (
       <Center minHeight={"100vh"}>

@@ -19,13 +19,6 @@ import { SearchComponent } from "../components/SearchComponent";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { formattedStartTime, formattedEndTime } from "../helpers/formattedTime";
 
-// export const postListLoader = async () => {
-//   const events = await fetch(`http://localhost:3000/events`);
-//   if (!events.ok) {
-//     throw new Error("Failed to fetch data");
-//   }
-// };
-
 export const EventsPage = () => {
   const events = useLoaderData();
   const { categoryId } = useCategory();
@@ -51,7 +44,7 @@ export const EventsPage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // 3000 ms = 3 seconden
+    }, 1000);
     // Schoonmaken van de timer bij component unmount
     return () => clearTimeout(timer);
   }, []);
@@ -68,9 +61,6 @@ export const EventsPage = () => {
         <Stack>
           <Box>
             <Flex justifyContent={"center"} gap={4} px={8} py={4}>
-              {/* <Heading size={"3xl"} textAlign={"center"}>
-                List of events
-              </Heading> */}
               <ErrorBoundary fallback="Dit is een error voor Search component">
                 <SearchComponent
                   clickFn={handleSearchChange}
@@ -83,59 +73,68 @@ export const EventsPage = () => {
                 </Button>
               </Link>
             </Flex>
-
-            <Box
-              minHeight={"100vh"}
-              p={8}
-              mt={4}
-              bg={"yellow.600"}
-              display={"flex"}
-              alignItems={"center"}
-              justifyContent={"center"}
-            >
+            <Center>
               <Flex
-                flexDir={["column", "row"]}
+                minHeight={"100vh"}
+                flexDir={"column"}
                 justifyContent={"center"}
-                alignItems={["flex-start"]}
-                gap={8}
-                flexWrap={"wrap"}
+                alignItems={"center"}
+                width={"100vw"}
+                p={4}
+                mt={4}
+                bg={"yellow.600"}
               >
-                {matchedEvents.length > 0 ? (
-                  matchedEvents.map((event) => (
-                    <Link to={`/event/${event.id}`} key={event.id}>
-                      <Card.Root w={"xs"} height={["md"]} borderRadius={20}>
-                        <Image
-                          src={event.image}
-                          height={"12rem"}
-                          borderTopRadius={20}
-                          borderBottomRadius={0}
-                        />
-                        <CardBody>
-                          <Heading textAlign={"center"}>{event.title}</Heading>
-                          <Text>{event.description}</Text>
-                          <Flex flexDir={"column"} gap={4}>
-                            <Text>{formattedStartTime(event)}</Text>
-                            <Text>{formattedEndTime(event)}</Text>
-                          </Flex>
-                          {event.categoryIds.map((id, index) => (
-                            <div key={index}>
-                              <Tag>{categoryId(id)?.name}</Tag>
-                            </div>
-                          ))}
-                        </CardBody>
-                      </Card.Root>
-                    </Link>
-                  ))
-                ) : (
-                  <Text textAlign={"center"}>No events found</Text>
-                )}
-                <Link to={"/add-new-event"}>
-                  <Button display={["flex", "none"]} w={"10rem"}>
-                    Add New Event
-                  </Button>
-                </Link>
+                <Box
+                  display="grid"
+                  gridTemplateColumns={{
+                    base: "1fr",
+                    md: "repeat(2, 1fr)",
+                    lg: "repeat(4, 1fr)",
+                  }}
+                  gap={4}
+                  width="100%"
+                  maxWidth="container.xl"
+                  justifyItems="center"
+                >
+                  {matchedEvents.length > 0 ? (
+                    matchedEvents.map((event) => (
+                      <Link to={`/event/${event.id}`} key={event.id}>
+                        <Card.Root w={"xs"} height={["md"]} borderRadius={20}>
+                          <Image
+                            src={event.image}
+                            height={"12rem"}
+                            borderTopRadius={20}
+                            borderBottomRadius={0}
+                          />
+                          <CardBody>
+                            <Heading textAlign={"center"}>
+                              {event.title}
+                            </Heading>
+                            <Text>{event.description}</Text>
+                            <Flex flexDir={"column"} gap={4}>
+                              <Text>{formattedStartTime(event)}</Text>
+                              <Text>{formattedEndTime(event)}</Text>
+                            </Flex>
+                            {event.categoryIds.map((id, index) => (
+                              <div key={index}>
+                                <Tag>{categoryId(id)?.name}</Tag>
+                              </div>
+                            ))}
+                          </CardBody>
+                        </Card.Root>
+                      </Link>
+                    ))
+                  ) : (
+                    <Text textAlign={"center"}>No events found</Text>
+                  )}
+                  <Link to={"/add-new-event"}>
+                    <Button display={["flex", "none"]} w={"10rem"}>
+                      Add New Event
+                    </Button>
+                  </Link>
+                </Box>
               </Flex>
-            </Box>
+            </Center>
           </Box>
         </Stack>
       )}
