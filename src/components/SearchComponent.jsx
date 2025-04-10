@@ -1,8 +1,6 @@
 import { Flex, Input } from "@chakra-ui/react";
 
 export const SearchComponent = ({ clickFn, ...props }) => {
-  // const value = undefined.property; // dit produceert een error om de errorBoundary te testen
-
   return (
     <Flex justifyContent={"center"}>
       <Input

@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  Button,
   Card,
   CardBody,
   Flex,
@@ -10,6 +9,7 @@ import {
   Text,
   Stack,
   Center,
+  Grid,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useLoaderData, Link } from "react-router-dom";
@@ -67,73 +67,59 @@ export const EventsPage = () => {
                   width={["xs", "md"]}
                 />
               </ErrorBoundary>
-              <Link to={"/add-new-event"}>
-                <Button display={["none", "flex"]} w={"10rem"}>
-                  Add New Event
-                </Button>
-              </Link>
             </Flex>
-            <Center>
-              <Flex
-                minHeight={"100vh"}
-                flexDir={"column"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                width={"100vw"}
-                p={4}
-                mt={4}
-                bg={"yellow.600"}
+            <Center
+              minHeight={"100vh"}
+              flexDir={"column"}
+              bg={"pink.300"}
+              p={8}
+            >
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(2, 1fr)",
+                  lg: "repeat(4, 1fr)",
+                }}
+                gap={8}
               >
-                <Box
-                  display="grid"
-                  gridTemplateColumns={{
-                    base: "1fr",
-                    md: "repeat(2, 1fr)",
-                    lg: "repeat(4, 1fr)",
-                  }}
-                  gap={4}
-                  width="100%"
-                  maxWidth="container.xl"
-                  justifyItems="center"
-                >
-                  {matchedEvents.length > 0 ? (
-                    matchedEvents.map((event) => (
-                      <Link to={`/event/${event.id}`} key={event.id}>
-                        <Card.Root w={"xs"} height={["md"]} borderRadius={20}>
-                          <Image
-                            src={event.image}
-                            height={"12rem"}
-                            borderTopRadius={20}
-                            borderBottomRadius={0}
-                          />
-                          <CardBody>
-                            <Heading textAlign={"center"}>
-                              {event.title}
-                            </Heading>
-                            <Text>{event.description}</Text>
-                            <Flex flexDir={"column"} gap={4}>
-                              <Text>{formattedStartTime(event)}</Text>
-                              <Text>{formattedEndTime(event)}</Text>
-                            </Flex>
+                {matchedEvents.length > 0 ? (
+                  matchedEvents.map((event) => (
+                    <Link to={`/event/${event.id}`} key={event.id}>
+                      <Card.Root
+                        w={"xs"}
+                        height={["md"]}
+                        boxShadow={"xl"}
+                        borderRadius={20}
+                        bg={"purple.300"}
+                        border="none"
+                        outline="none"
+                      >
+                        <Image
+                          src={event.image}
+                          height={"12rem"}
+                          borderTopRadius={20}
+                          borderBottomRadius={0}
+                        />
+                        <CardBody>
+                          <Heading textAlign={"start"}>{event.title}</Heading>
+                          <Text mt={2}>{event.description}</Text>
+                          <Flex flexDir={"column"} mt={2}>
+                            <Text>{formattedStartTime(event)}</Text>
+                            <Text>{formattedEndTime(event)}</Text>
+                          </Flex>
+                          <Flex flexDir={"row"} gap={2} flexWrap="wrap" mt={2}>
                             {event.categoryIds.map((id, index) => (
-                              <div key={index}>
-                                <Tag>{categoryId(id)?.name}</Tag>
-                              </div>
+                              <Tag key={index}>{categoryId(id)?.name}</Tag>
                             ))}
-                          </CardBody>
-                        </Card.Root>
-                      </Link>
-                    ))
-                  ) : (
-                    <Text textAlign={"center"}>No events found</Text>
-                  )}
-                  <Link to={"/add-new-event"}>
-                    <Button display={["flex", "none"]} w={"10rem"}>
-                      Add New Event
-                    </Button>
-                  </Link>
-                </Box>
-              </Flex>
+                          </Flex>
+                        </CardBody>
+                      </Card.Root>
+                    </Link>
+                  ))
+                ) : (
+                  <Text textAlign={"center"}>No events found</Text>
+                )}
+              </Grid>
             </Center>
           </Box>
         </Stack>

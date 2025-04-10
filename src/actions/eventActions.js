@@ -1,3 +1,4 @@
+// Update Event
 export const updateEvent = async ({ request, params }) => {
   const formData = await request.formData();
   const eventId = params.eventId;
@@ -25,6 +26,7 @@ export const updateEvent = async ({ request, params }) => {
   return { ok: true };
 };
 
+// Create Event
 export const createEvent = async ({ request }) => {
   const formData = await request.formData();
 
@@ -54,11 +56,15 @@ export const createEvent = async ({ request }) => {
   return { ok: true };
 };
 
+// Delete Evenet
 export const deleteEvent = async ({ params }) => {
   const eventId = params.eventId;
 
   const response = await fetch(`http://localhost:3000/events/${eventId}`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   if (!response.ok) {

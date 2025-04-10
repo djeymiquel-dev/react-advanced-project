@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { Field } from "../components/ui/field";
 import { CategoryContext } from "../context/CategoryContext";
 import { UserContext } from "../context/UserContext";
-import { SelectUserComponent } from "../components/SelectUserComponent";
+import { SelectUser } from "../components/SelectUser";
 import { useNavigate, useNavigation, useRevalidator } from "react-router-dom";
 
 export const AddNewEvent = () => {
@@ -94,8 +94,10 @@ export const AddNewEvent = () => {
   };
 
   return (
-    <Center flexDir={"column"}>
-      <Heading>Add New Event</Heading>
+    <Center minHeight={"100vh"} bg={"blackAlpha.400"} flexDir={"column"}>
+      <Heading size={"3xl"} color={"blackAlpha.700"}>
+        Add New Event
+      </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex
           flexDir={"column"}
@@ -103,14 +105,11 @@ export const AddNewEvent = () => {
           bg={"purple.300"}
           mt={10}
           gap={4}
-          w={["xs", "md"]}
+          w={["sm", "md"]}
           borderRadius={10}
         >
           <Stack gap={4}>
-            <SelectUserComponent
-              users={users}
-              setSelectedUserId={setSelectedUserId}
-            />
+            <SelectUser users={users} setSelectedUserId={setSelectedUserId} />
 
             <Input
               {...register("title")}
@@ -189,15 +188,6 @@ export const AddNewEvent = () => {
               </SelectContent>
             </SelectRoot>
 
-            <Field>
-              <Input
-                {...register("location")}
-                type="text"
-                placeholder="location"
-                variant={"filled"}
-              />
-            </Field>
-
             <Flex gap={2} display={["block", "flex"]}>
               <Field label="Starttime">
                 <Input
@@ -206,6 +196,7 @@ export const AddNewEvent = () => {
                   {...register("startTime", { required: true })}
                   variant={"filled"}
                 />
+                i
               </Field>
 
               <Field label="Endtime">

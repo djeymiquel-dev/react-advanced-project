@@ -68,10 +68,7 @@ export const DeleteEvent = ({ event }) => {
               </Button>
             </DialogHeader>
             <DialogBody>
-              <Text>
-                Are you sure you want to delete this event? This action cannot
-                be undone.
-              </Text>
+              <Text>Are you sure you want to delete this event?</Text>
             </DialogBody>
             <DialogFooter>
               <Button variant="ghost" mr={3} onClick={() => setIsOpen(false)}>

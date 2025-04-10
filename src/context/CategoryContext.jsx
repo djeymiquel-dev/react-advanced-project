@@ -27,7 +27,6 @@ export const CategoryContextProvider = ({ children }) => {
       }
     };
     getCategories();
-    // console.log("categories loading:", categories);
   }, []);
 
   return (

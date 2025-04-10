@@ -50,7 +50,7 @@ export const EditEvent = ({ event }) => {
     formData.append("image", data.image);
 
     submit(formData, {
-      method: "PATCH",
+      method: "PUT",
     });
 
     toaster.create({

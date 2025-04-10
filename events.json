@@ -15,7 +15,7 @@
     {
       "id": 1,
       "createdBy": 1,
-      "title": "Trampoline party",
+      "title": "Trampoline party ",
       "description": "Bounce around with your friends ",
       "image": "https://i.pinimg.com/736x/3d/2f/af/3d2faf4e3188d34a9fcdc00df59e77b0.jpg",
       "categoryIds": [
@@ -41,7 +41,7 @@
     {
       "id": 3,
       "createdBy": 2,
-      "title": "Badminton game",
+      "title": "Badminton game ",
       "description": "Hit that shuttle!",
       "image": "https://wincacademy.github.io/webpages/media/pexels-vladvictoria-2202685.jpg",
       "categoryIds": [
@@ -64,19 +64,6 @@
       "location": "Shavasana Yoga School",
       "startTime": "2023-03-09T06:00:00.000Z",
       "endTime": "2023-03-09T07:00:00.000Z"
-    },
-    {
-      "createdBy": 1,
-      "title": "Dit is een nieuwe event",
-      "description": "wat gaan we doen vandaag of morgen",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYFYUMxwjoJUgk-Bv9mwUGhi6uhAIKOfWZHw&s",
-      "categoryIds": [
-        1
-      ],
-      "location": "Amsterdam",
-      "startTime": "2025-04-10T15:15:00.000Z",
-      "endTime": "2025-04-11T15:15:00.000Z",
-      "id": 5
     }
   ],
   "categories": [

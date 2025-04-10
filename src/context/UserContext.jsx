@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 export const UserContext = createContext([]);
 UserContext.displayName = "UserContext";
 
+// Provider component
 export const UserContextProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
 
@@ -22,7 +23,6 @@ export const UserContextProvider = ({ children }) => {
       }
     };
     getUsers();
-    // console.log("users loading:", user);
   }, []);
 
   return (

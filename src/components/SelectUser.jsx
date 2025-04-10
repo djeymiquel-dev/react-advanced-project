@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-export const SelectUserComponent = ({ users, setSelectedUserId }) => {
+export const SelectUser = ({ users, setSelectedUserId }) => {
   const [selectedUserName, setSelectedUserName] = useState("");
 
   const handleUserChange = (userId, userName) => {

@@ -4,15 +4,15 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
   Center,
   Flex,
   Heading,
   Image,
   Stack,
   Text,
+  Button,
 } from "@chakra-ui/react";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { formattedStartTime, formattedEndTime } from "../helpers/formattedTime";
 import { useContext } from "react";
@@ -27,6 +27,7 @@ export const EventPage = () => {
   const { eventId } = useParams();
   const { categories } = useContext(CategoryContext);
   const { users } = useContext(UserContext);
+  const navigate = useNavigate();
   const event = events.find((e) => e.id.toString() === eventId.toString());
 
   useEffect(() => {
@@ -43,17 +44,26 @@ export const EventPage = () => {
 
   return (
     <>
-      <Center minHeight={"100vh"}>
-        <Card.Root w={"2xl"}>
-          <CardHeader>
-            <Image
-              src={event.image}
-              objectFit={"cover"}
-              w={"100vw"}
-              height={"22rem"}
-            />
-          </CardHeader>
-          <CardBody>
+      <Center minHeight={"100vh"} bg={"yellow.200"}>
+        <Card.Root w={["sm", "xl"]} h={"100vh"} bg={"purple.300"}>
+          <Button
+            onClick={() => navigate("/")}
+            m={4}
+            variant="outline"
+            alignSelf="flex-start"
+            ml={4}
+            bg={"purple.500"}
+          >
+            Back to Events
+          </Button>
+          <Image
+            src={event.image}
+            objectFit={"cover"}
+            width="100%"
+            height={"18rem"}
+          />
+
+          <CardBody bg={"purple.300"}>
             <Stack gap={4}>
               {users.map((user) =>
                 user.id === event.createdBy ? (
@@ -68,22 +78,22 @@ export const EventPage = () => {
                   </Box>
                 ) : null
               )}
-              <Heading size={"5xl"}>{event.title}</Heading>
-              <Text fontSize={"2xl"}>{event.description}</Text>
+              <Heading size={"xl"}>{event.title}</Heading>
+              <Text fontSize={"xl"}>{event.description}</Text>
               <Flex flexDir={"column"} gap={2}>
                 <Text fontSize={"xl"}>Start: {formattedStartTime(event)}</Text>
                 <Text fontSize={"xl"}>End: {formattedEndTime(event)}</Text>
               </Flex>
-              {categories
-                .filter((category) => event.categoryIds.includes(category.id)) // Filter categorieën op basis van categoryIds
-                .map((category) => (
-                  <Box key={category.id}>
-                    <Tag>{category.name}</Tag>
-                  </Box>
-                ))}
+              <Flex flexDir={"row"} gap={2} flexWrap="wrap">
+                {categories
+                  .filter((category) => event.categoryIds.includes(category.id))
+                  .map((category) => (
+                    <Tag key={category.id}>{category.name}</Tag>
+                  ))}
+              </Flex>
             </Stack>
           </CardBody>
-          <CardFooter>
+          <CardFooter bg={"purple.700"} p={4}>
             <EditEvent event={event} />
             <DeleteEvent event={event} />
           </CardFooter>
