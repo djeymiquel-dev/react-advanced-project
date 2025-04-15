@@ -10,9 +10,9 @@ import {
   Image,
   Stack,
   Text,
-  Button,
+  // Button,
 } from "@chakra-ui/react";
-import { useLoaderData, useParams, useNavigate } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { formattedStartTime, formattedEndTime } from "../helpers/formattedTime";
 import { useContext } from "react";
@@ -27,7 +27,7 @@ export const EventPage = () => {
   const { eventId } = useParams();
   const { categories } = useContext(CategoryContext);
   const { users } = useContext(UserContext);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const event = events.find((e) => e.id.toString() === eventId.toString());
 
   useEffect(() => {
@@ -44,26 +44,22 @@ export const EventPage = () => {
 
   return (
     <>
-      <Center minHeight={"100vh"} bg={"yellow.200"}>
-        <Card.Root w={["sm", "xl"]} h={"100vh"} bg={"purple.300"}>
-          <Button
-            onClick={() => navigate("/")}
-            m={4}
-            variant="outline"
-            alignSelf="flex-start"
-            ml={4}
-            bg={"purple.500"}
-          >
-            Back to Events
-          </Button>
+      <Flex justifyContent={"center"} alignItems={"center"} mt={8}>
+        <Card.Root
+          w={["sm", "xl"]}
+          h={"lg"}
+          bg={"purple.300"}
+          borderRadius={25}
+        >
           <Image
             src={event.image}
             objectFit={"cover"}
             width="100%"
             height={"18rem"}
+            borderTopRadius={25}
           />
 
-          <CardBody bg={"purple.300"}>
+          <CardBody bg={"purple.500"}>
             <Stack gap={4}>
               {users.map((user) =>
                 user.id === event.createdBy ? (
@@ -88,17 +84,29 @@ export const EventPage = () => {
                 {categories
                   .filter((category) => event.categoryIds.includes(category.id))
                   .map((category) => (
-                    <Tag key={category.id}>{category.name}</Tag>
+                    <Tag
+                      key={category.id}
+                      size={"lg"}
+                      bg={"purple.700"}
+                      border={"none"}
+                      outline={"none"}
+                      boxShadow={"none"}
+                      display={"flex"}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                    >
+                      {category.name}
+                    </Tag>
                   ))}
               </Flex>
             </Stack>
           </CardBody>
-          <CardFooter bg={"purple.700"} p={4}>
+          <CardFooter bg={"purple.300"} p={4} borderBottomRadius={25}>
             <EditEvent event={event} />
             <DeleteEvent event={event} />
           </CardFooter>
         </Card.Root>
-      </Center>
+      </Flex>
     </>
   );
 };

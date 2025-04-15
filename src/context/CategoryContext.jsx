@@ -19,7 +19,7 @@ export const CategoryContextProvider = ({ children }) => {
   useEffect(() => {
     const getCategories = async () => {
       try {
-        const response = await fetch("http://localhost:3000/categories");
+        const response = await fetch("http://localhost:5000/categories");
         const category = await response.json();
         setCategories(category);
       } catch (error) {

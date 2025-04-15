@@ -46,7 +46,7 @@ export const DeleteEvent = ({ event }) => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"outline"} size={"sm"} colorScheme="red">
+        <Button variant={"outline"} size={"sm"} bg={"purple.700"}>
           Delete Event
         </Button>
       </DialogTrigger>

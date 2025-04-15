@@ -11,7 +11,7 @@ export const updateEvent = async ({ request, params }) => {
     image: formData.get("image"),
   };
 
-  const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+  const response = await fetch(`http://localhost:5000/events/${eventId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -41,7 +41,7 @@ export const createEvent = async ({ request }) => {
     endTime: new Date(formData.get("endTime")).toISOString(),
   };
 
-  const response = await fetch("http://localhost:3000/events", {
+  const response = await fetch("http://localhost:5000/events", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export const createEvent = async ({ request }) => {
 export const deleteEvent = async ({ params }) => {
   const eventId = params.eventId;
 
-  const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+  const response = await fetch(`http://localhost:5000/events/${eventId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

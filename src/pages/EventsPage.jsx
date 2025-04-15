@@ -78,7 +78,8 @@ export const EventsPage = () => {
                 templateColumns={{
                   base: "repeat(1, 1fr)",
                   md: "repeat(2, 1fr)",
-                  lg: "repeat(4, 1fr)",
+                  lg: "repeat(3, 1fr)",
+                  xl: "repeat(4, 1fr)",
                 }}
                 gap={8}
               >
@@ -86,11 +87,11 @@ export const EventsPage = () => {
                   matchedEvents.map((event) => (
                     <Link to={`/event/${event.id}`} key={event.id}>
                       <Card.Root
-                        w={"xs"}
+                        w={["xs"]}
                         height={["md"]}
                         boxShadow={"xl"}
                         borderRadius={20}
-                        bg={"purple.300"}
+                        bg={"purple.500"}
                         border="none"
                         outline="none"
                       >
@@ -109,7 +110,18 @@ export const EventsPage = () => {
                           </Flex>
                           <Flex flexDir={"row"} gap={2} flexWrap="wrap" mt={2}>
                             {event.categoryIds.map((id, index) => (
-                              <Tag key={index}>{categoryId(id)?.name}</Tag>
+                              <Tag
+                                key={index}
+                                bg={"purple.700"}
+                                border={"none"}
+                                outline={"none"}
+                                boxShadow={"none"}
+                                display={"flex"}
+                                alignItems={"center"}
+                                justifyContent={"center"}
+                              >
+                                {categoryId(id)?.name}
+                              </Tag>
                             ))}
                           </Flex>
                         </CardBody>

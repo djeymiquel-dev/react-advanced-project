@@ -16,9 +16,9 @@ export const SelectUser = ({ users, setSelectedUserId }) => {
   };
 
   return (
-    <SelectRoot>
+    <SelectRoot variant={"subtle"}>
       {/* <SelectLabel></SelectLabel> */}
-      <SelectTrigger bg={"blackAlpha.900"} color={"white"}>
+      <SelectTrigger>
         <SelectValueText placeholder={selectedUserName || "select user"} />
       </SelectTrigger>
       <SelectContent>

@@ -65,7 +65,7 @@ export const EditEvent = ({ event }) => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"outline"} size={"sm"}>
+        <Button variant={"outline"} size={"sm"} bg={"purple.700"}>
           Edit Event
         </Button>
       </DialogTrigger>

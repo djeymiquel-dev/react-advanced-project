@@ -11,7 +11,6 @@ import {
 import {
   SelectContent,
   SelectItem,
-  SelectLabel,
   SelectRoot,
   SelectTrigger,
   SelectValueText,
@@ -71,7 +70,7 @@ export const AddNewEvent = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/events", {
+      const response = await fetch("http://localhost:5000/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,51 +93,48 @@ export const AddNewEvent = () => {
   };
 
   return (
-    <Center minHeight={"100vh"} bg={"blackAlpha.400"} flexDir={"column"}>
-      <Heading size={"3xl"} color={"blackAlpha.700"}>
+    <Center minHeight={"100vh"} bg={"purple.500"} flexDir={"column"}>
+      <Heading size={"3xl"} color={"white"}>
         Add New Event
       </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex
           flexDir={"column"}
           p={4}
-          bg={"purple.300"}
           mt={10}
           gap={4}
-          w={["sm", "md"]}
+          w={["xs", "md"]}
           borderRadius={10}
+          border={"1px solid white"}
         >
           <Stack gap={4}>
             <SelectUser users={users} setSelectedUserId={setSelectedUserId} />
 
             <Input
+              variant={"subtle"}
               {...register("title")}
               placeholder="event name..."
-              variant={"filled"}
-              p={2}
             />
             {errors.title && <p>{errors.title.message}</p>}
 
             <Textarea
+              variant={"subtle"}
               {...register("description")}
               placeholder="description..."
               rows={4}
               cols={50}
-              variant={"subtle"}
-              p={2}
             />
 
             <Input
               type="url"
+              variant={"subtle"}
               {...register("image", {
                 pattern: {
                   value: /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i,
                   message: "Please enter a valid URL",
                 },
               })}
-              placeholder="Enter image URL..."
-              variant="filled"
-              p={2}
+              placeholder="enter image URL..."
             />
             {/* Validatiefouten weergeven */}
             {errors.image && (
@@ -164,21 +160,18 @@ export const AddNewEvent = () => {
             <SelectRoot
               multiple
               size="sm"
-              variant={"filled"}
-              bg={"black"}
+              positioning={{ placement: "top" }}
               borderRadius={4}
+              variant={"subtle"}
             >
-              <SelectLabel bg={"green"} borderRadius={4} p={2}>
-                Select 1 or more{" "}
-              </SelectLabel>
               <SelectTrigger>
-                <SelectValueText placeholder={"Category"} color={"white"} />
+                <SelectValueText placeholder={"select 1 or more categories"} />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
                   <SelectItem
                     key={category.id}
-                    item={category.name}
+                    item={category}
                     selected={selectedCategoryIds.includes(category.id)}
                     onClick={() => handleCategoryChange(category.id)}
                   >
@@ -194,9 +187,8 @@ export const AddNewEvent = () => {
                   id="startTime"
                   type="datetime-local"
                   {...register("startTime", { required: true })}
-                  variant={"filled"}
+                  variant={"subtle"}
                 />
-                i
               </Field>
 
               <Field label="Endtime">
@@ -204,7 +196,7 @@ export const AddNewEvent = () => {
                   id="endTime"
                   type="datetime-local"
                   {...register("endTime", { required: true })}
-                  variant={"filled"}
+                  variant={"subtle"}
                 />
               </Field>
             </Flex>
