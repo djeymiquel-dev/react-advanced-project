@@ -1,19 +1,20 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 // Context aanmaken
-export const CategoryContext = createContext([]);
+export const CategoryContext = createContext(undefined);
 CategoryContext.displayName = "CategoryContext";
 
 // Provider Component
 export const CategoryContextProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const categoryId = (id) => {
-    return categories.find((category) => category.id === id);
-  };
+    return categories.find((category) => {
+      // console.log(category.id);
 
-  const categoryName = () => {
-    return categories;
+      return Number(category.id) === Number(id);
+    });
   };
 
   useEffect(() => {
@@ -30,7 +31,15 @@ export const CategoryContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <CategoryContext.Provider value={{ categories, categoryId, categoryName }}>
+    <CategoryContext.Provider
+      value={{
+        categories,
+        categoryId,
+
+        selectedCategory,
+        setSelectedCategory,
+      }}
+    >
       {children}
     </CategoryContext.Provider>
   );

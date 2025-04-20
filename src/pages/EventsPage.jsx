@@ -15,30 +15,42 @@ import { useState, useEffect } from "react";
 import { useLoaderData, Link } from "react-router-dom";
 import { useCategory } from "../context/CategoryContext";
 import { Tag } from "../components/ui/tag";
-import { SearchComponent } from "../components/SearchComponent";
+import { SearchComponent } from "../components/SearchEventFilter";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { formattedStartTime, formattedEndTime } from "../helpers/formattedTime";
+import { SelectCategoryFilter } from "../components/SelectCategoryFilter";
 
 export const EventsPage = () => {
   const events = useLoaderData();
-  const { categoryId } = useCategory();
+  const { categoryId, categories } = useCategory();
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const matchedEvents = events.filter((event) => {
-    const titleMatch = event.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
+    const titleMatch =
+      !searchTerm ||
+      event.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const categoryMatch = event.categoryIds.some((id) => {
-      const category = categoryId(id);
-      return category?.name.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-    return titleMatch || categoryMatch;
+    const categoryMatch =
+      selectedCategory === "" ||
+      event.categoryIds.some((id) => {
+        const category = categories.find((cat) => cat.id === id);
+        return selectedCategory.includes(category?.name);
+      });
+
+    return titleMatch && categoryMatch;
   });
 
+  // Search Handler
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  // Category Handler
+  const handleCategoryChange = (category) => {
+    const value = category?.value || "";
+    setSelectedCategory(value);
   };
 
   useEffect(() => {
@@ -60,8 +72,19 @@ export const EventsPage = () => {
       ) : (
         <Stack>
           <Box>
-            <Flex justifyContent={"center"} gap={4} px={8} py={4}>
+            <Flex
+              flexDir={["column", "row"]}
+              justifyContent={"center"}
+              gap={4}
+              px={8}
+              py={4}
+            >
               <ErrorBoundary fallback="Dit is een error voor Search component">
+                <SelectCategoryFilter
+                  CallbackFN={handleCategoryChange}
+                  selectedCategory={selectedCategory}
+                />
+
                 <SearchComponent
                   clickFn={handleSearchChange}
                   width={["xs", "md"]}
@@ -74,17 +97,21 @@ export const EventsPage = () => {
               bg={"pink.300"}
               p={8}
             >
-              <Grid
-                templateColumns={{
-                  base: "repeat(1, 1fr)",
-                  md: "repeat(2, 1fr)",
-                  lg: "repeat(3, 1fr)",
-                  xl: "repeat(4, 1fr)",
-                }}
-                gap={8}
-              >
-                {matchedEvents.length > 0 ? (
-                  matchedEvents.map((event) => (
+              {matchedEvents.length === 0 ? (
+                <Heading size={"4xl"} textAlign={"center"}>
+                  No events found
+                </Heading>
+              ) : (
+                <Grid
+                  templateColumns={{
+                    base: "repeat(1, 1fr)",
+                    md: "repeat(2, 1fr)",
+                    lg: "repeat(3, 1fr)",
+                    xl: "repeat(4, 1fr)",
+                  }}
+                  gap={8}
+                >
+                  {matchedEvents.map((event) => (
                     <Link to={`/event/${event.id}`} key={event.id}>
                       <Card.Root
                         w={["xs"]}
@@ -127,11 +154,9 @@ export const EventsPage = () => {
                         </CardBody>
                       </Card.Root>
                     </Link>
-                  ))
-                ) : (
-                  <Text textAlign={"center"}>No events found</Text>
-                )}
-              </Grid>
+                  ))}
+                </Grid>
+              )}
             </Center>
           </Box>
         </Stack>

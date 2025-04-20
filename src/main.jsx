@@ -21,7 +21,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: (
-          <ErrorBoundary fallback={"er gaat iets mis"}>
+          <ErrorBoundary fallback={"er gaat iets mis op de homepage"}>
             <EventsPage />
           </ErrorBoundary>
         ),
@@ -31,7 +31,9 @@ const router = createBrowserRouter([
       {
         path: "/add-new-event",
         element: (
-          <ErrorBoundary fallback={"er gaat iets mis"}>
+          <ErrorBoundary
+            fallback={"er gaat iets mis op de add new event pagina"}
+          >
             <AddNewEvent />
           </ErrorBoundary>
         ),
@@ -41,7 +43,11 @@ const router = createBrowserRouter([
 
       {
         path: "/event/:eventId",
-        element: <EventPage />,
+        element: (
+          <ErrorBoundary fallback>
+            <EventPage />
+          </ErrorBoundary>
+        ),
         loader: eventLoader,
         action: updateEvent,
         children: [

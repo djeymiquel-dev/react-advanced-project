@@ -15,6 +15,8 @@ import {
 import { useState } from "react";
 import { useSubmit, useNavigate } from "react-router-dom";
 import { toaster } from "./ui/toaster";
+import { IconButton } from "@chakra-ui/react";
+import { FaTrashAlt } from "react-icons/fa";
 
 export const DeleteEvent = ({ event }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,12 +45,17 @@ export const DeleteEvent = ({ event }) => {
     }
   };
 
+  const hover = {
+    background: "red.500",
+    color: "white",
+  };
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"outline"} size={"sm"} bg={"purple.700"}>
-          Delete Event
-        </Button>
+        <IconButton _hover={hover}>
+          <FaTrashAlt />
+        </IconButton>
       </DialogTrigger>
       <Portal>
         <DialogBackdrop />

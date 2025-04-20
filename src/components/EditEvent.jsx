@@ -13,6 +13,7 @@ import {
   Textarea,
   Stack,
   Text,
+  Flex,
 } from "@chakra-ui/react";
 import { CloseButton } from "./ui/close-button";
 import { useForm } from "react-hook-form";
@@ -20,6 +21,10 @@ import { useSubmit, useNavigation } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { toaster } from "./ui/toaster";
+import { formatDateTimeLocal } from "../helpers/formattedTime";
+import { useEffect } from "react";
+import { IconButton } from "@chakra-ui/react";
+import { LuPencil } from "react-icons/lu";
 
 export const EditEvent = ({ event }) => {
   const submit = useSubmit();
@@ -35,11 +40,22 @@ export const EditEvent = ({ event }) => {
     defaultValues: {
       title: event?.title || "",
       description: event?.description || "",
-      startTime: event?.startTime || "",
-      endTime: event?.endTime || "",
+      startTime: formatDateTimeLocal(event?.startTime) || "",
+      endTime: formatDateTimeLocal(event?.endTime) || "",
       image: event?.image || "",
     },
   });
+
+  // Reset het formulier wanneer de event prop verandert
+  useEffect(() => {
+    reset({
+      title: event?.title || "",
+      description: event?.description || "",
+      startTime: formatDateTimeLocal(event?.startTime) || "",
+      endTime: formatDateTimeLocal(event?.endTime) || "",
+      image: event?.image || "",
+    });
+  }, [event, reset]);
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -58,36 +74,43 @@ export const EditEvent = ({ event }) => {
       type: "success",
     });
 
-    reset();
+    // reset();
     setIsOpen(false);
+  };
+
+  const hover = {
+    bg: "purple.700",
+    color: "white",
   };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"outline"} size={"sm"} bg={"purple.700"}>
-          Edit Event
-        </Button>
+        <IconButton _hover={hover}>
+          <LuPencil />
+        </IconButton>
       </DialogTrigger>
       <Portal>
         <DialogBackdrop />
         <DialogPositioner>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Event</DialogTitle>
-              <Button
-                position="absolute"
-                right="2"
-                top="2"
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setIsOpen(false);
-                  reset();
-                }}
+              <Flex
+                flexDir={"row"}
+                w={"100%"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
               >
-                <CloseButton size="sm" />
-              </Button>
+                <DialogTitle>Edit Event</DialogTitle>
+                <CloseButton
+                  variant="ghost"
+                  _hover={hover}
+                  onClick={() => {
+                    setIsOpen(false);
+                    reset();
+                  }}
+                />
+              </Flex>
             </DialogHeader>
             <DialogBody>
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -122,6 +145,7 @@ export const EditEvent = ({ event }) => {
                       id="startTime"
                       type="datetime-local"
                       {...register("startTime")}
+                      placeholder="Event starttime"
                     />
                     {errors.startTime && (
                       <Text color="red.500">{errors.startTime.message}</Text>
@@ -152,10 +176,16 @@ export const EditEvent = ({ event }) => {
                     )}
                   </div>
                 </Stack>
-                <DialogFooter>
+                <DialogFooter
+                  display={"flex"}
+                  justifyContent={"flex-start"}
+                  alignItems={"center"}
+                  mt={4}
+                  p={0}
+                >
                   <Button
-                    variant="ghost"
-                    mr={3}
+                    variant="outline"
+                    _hover={hover}
                     onClick={() => {
                       setIsOpen(false);
                       reset();
@@ -164,9 +194,10 @@ export const EditEvent = ({ event }) => {
                     Cancel
                   </Button>
                   <Button
-                    colorScheme="blue"
+                    variant="outline"
                     type="submit"
                     isLoading={navigation.state === "submitting"}
+                    _hover={hover}
                   >
                     Save Changes
                   </Button>

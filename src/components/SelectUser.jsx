@@ -6,11 +6,17 @@ import {
   SelectContent,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useUser } from "../context/UserContext";
 
-export const SelectUser = ({ users, setSelectedUserId }) => {
+export const SelectUser = ({ setSelectedUserId }) => {
   const [selectedUserName, setSelectedUserName] = useState("");
+  const { users } = useUser();
 
   const handleUserChange = (userId, userName) => {
+    if (!userId || !userName) {
+      console.error("Invalid userId or userName");
+      return;
+    }
     setSelectedUserId(userId);
     setSelectedUserName(userName);
   };
@@ -26,6 +32,8 @@ export const SelectUser = ({ users, setSelectedUserId }) => {
           <SelectItem
             key={user.id}
             value={user.name}
+            item={user.name}
+            // selected={selectedUserName === user.name}
             onClick={() => handleUserChange(user.id, user.name)}
           >
             {user.name}

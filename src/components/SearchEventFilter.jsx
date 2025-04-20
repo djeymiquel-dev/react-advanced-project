@@ -1,5 +1,4 @@
 import { Flex, Input } from "@chakra-ui/react";
-
 export const SearchComponent = ({ clickFn, ...props }) => {
   return (
     <Flex justifyContent={"center"}>

@@ -8,40 +8,25 @@ import {
   Textarea,
   Image,
 } from "@chakra-ui/react";
-import {
-  SelectContent,
-  SelectItem,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
-} from "../components/ui/select";
-import { useState, useContext } from "react";
+
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Field } from "../components/ui/field";
-import { CategoryContext } from "../context/CategoryContext";
-import { UserContext } from "../context/UserContext";
+// import { UserContext } from "../context/UserContext";
 import { SelectUser } from "../components/SelectUser";
 import { useNavigate, useNavigation, useRevalidator } from "react-router-dom";
+import { toaster } from "../components/ui/toaster";
+import { AddNewEventSelectCategory } from "../components/AddNewEventSelectCategory";
+// import { CategoryContext } from "../context/CategoryContext";
 
 export const AddNewEvent = () => {
-  const { categories } = useContext(CategoryContext);
-  const { users } = useContext(UserContext);
+  // const { categories } = useContext(CategoryContext);
+  // const { users } = useContext(UserContext);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const navigate = useNavigate();
   const navigation = useNavigation();
   const revalidator = useRevalidator();
-
-  const handleCategoryChange = (categoryId) => {
-    setSelectedCategoryIds((prev) => {
-      // Controleer of de ID al is geselecteerd
-      if (prev.includes(categoryId)) {
-        return prev.filter((id) => id !== categoryId); // Verwijder als het al geselecteerd is
-      } else {
-        return [...prev, categoryId]; // Voeg toe als het nog niet is geselecteerd
-      }
-    });
-  };
 
   const {
     register,
@@ -55,6 +40,11 @@ export const AddNewEvent = () => {
   const onSubmit = async (data) => {
     if (!selectedUserId) {
       alert("Please select a user");
+      return;
+    }
+
+    if (selectedCategoryIds.length === 0) {
+      alert("Please select at least one category");
       return;
     }
 
@@ -77,19 +67,33 @@ export const AddNewEvent = () => {
         },
         body: JSON.stringify(newEvent),
       });
-
       if (!response.ok) {
         throw new Error("Failed to create event");
       }
-
       // Force a refresh of the data
       revalidator.revalidate();
+
+      toaster.create({
+        description: "Added Event successfully",
+        type: "success",
+      });
 
       // Navigate to home page
       navigate("/", { replace: true });
     } catch (error) {
       console.error("Error submitting form:", error);
     }
+  };
+
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategoryIds((prev) => {
+      // Controleer of de ID al is geselecteerd
+      if (prev.includes(categoryId)) {
+        return prev.filter((id) => id !== categoryId); // Verwijder als het al geselecteerd is
+      } else {
+        return [...prev, categoryId]; // Voeg toe als het nog niet is geselecteerd
+      }
+    });
   };
 
   return (
@@ -108,7 +112,8 @@ export const AddNewEvent = () => {
           border={"1px solid white"}
         >
           <Stack gap={4}>
-            <SelectUser users={users} setSelectedUserId={setSelectedUserId} />
+            {/* Select user component */}
+            <SelectUser setSelectedUserId={setSelectedUserId} />
 
             <Input
               variant={"subtle"}
@@ -116,7 +121,6 @@ export const AddNewEvent = () => {
               placeholder="event name..."
             />
             {errors.title && <p>{errors.title.message}</p>}
-
             <Textarea
               variant={"subtle"}
               {...register("description")}
@@ -124,7 +128,6 @@ export const AddNewEvent = () => {
               rows={4}
               cols={50}
             />
-
             <Input
               type="url"
               variant={"subtle"}
@@ -140,7 +143,6 @@ export const AddNewEvent = () => {
             {errors.image && (
               <p style={{ color: "red" }}>{errors.image.message}</p>
             )}
-
             {/* Optionele afbeelding preview */}
             {imageUrl && (
               <div style={{ marginTop: "10px" }}>
@@ -156,31 +158,11 @@ export const AddNewEvent = () => {
                 />
               </div>
             )}
-
-            <SelectRoot
-              multiple
-              size="sm"
-              positioning={{ placement: "top" }}
-              borderRadius={4}
-              variant={"subtle"}
-            >
-              <SelectTrigger>
-                <SelectValueText placeholder={"select 1 or more categories"} />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem
-                    key={category.id}
-                    item={category}
-                    selected={selectedCategoryIds.includes(category.id)}
-                    onClick={() => handleCategoryChange(category.id)}
-                  >
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </SelectRoot>
-
+            {/* category component */}
+            <AddNewEventSelectCategory
+              handleCategoryChange={handleCategoryChange}
+              selectedCategoryIds={selectedCategoryIds}
+            />
             <Flex gap={2} display={["block", "flex"]}>
               <Field label="Starttime">
                 <Input
@@ -190,7 +172,6 @@ export const AddNewEvent = () => {
                   variant={"subtle"}
                 />
               </Field>
-
               <Field label="Endtime">
                 <Input
                   id="endTime"
@@ -200,7 +181,6 @@ export const AddNewEvent = () => {
                 />
               </Field>
             </Flex>
-
             <Button type="submit" isLoading={navigation.state === "submitting"}>
               Submit
             </Button>

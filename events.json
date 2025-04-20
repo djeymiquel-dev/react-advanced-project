@@ -23,20 +23,20 @@
       ],
       "location": "My back yard",
       "startTime": "2023-03-10T17:00:00.000Z",
-      "endTime": "2025-04-20T17:22:00.000Z"
+      "endTime": "2023-03-16T19:52:00.000Z"
     },
     {
       "id": 2,
       "createdBy": 1,
-      "title": "Laser Tag mania",
+      "title": "Laser Tag mania ",
       "description": "Let's play laser tag!",
       "image": "https://www.ctvnews.ca/polopoly_fs/1.5118552.1600965663!/httpImage/image.jpg_gen/derivatives/landscape_1020/image.jpg",
       "categoryIds": [
         2
       ],
       "location": "Blinded by the Lights Laser Tag, 15 Main St.",
-      "startTime": "2023-04-06T18:46",
-      "endTime": "2023-04-06T17:46"
+      "startTime": "2023-04-06T16:46:00.000Z",
+      "endTime": "2023-04-06T15:46:00.000Z"
     },
     {
       "id": 3,

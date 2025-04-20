@@ -10,7 +10,7 @@ import {
   Image,
   Stack,
   Text,
-  // Button,
+  IconButton,
 } from "@chakra-ui/react";
 import { useLoaderData, useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -21,13 +21,15 @@ import { CategoryContext } from "../context/CategoryContext";
 import { Tag } from "../components/ui/tag";
 import { EditEvent } from "../components/EditEvent";
 import { DeleteEvent } from "../components/DeleteEvent";
+import { useNavigate } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 
 export const EventPage = () => {
   const events = useLoaderData();
   const { eventId } = useParams();
   const { categories } = useContext(CategoryContext);
   const { users } = useContext(UserContext);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const event = events.find((e) => e.id.toString() === eventId.toString());
 
   useEffect(() => {
@@ -37,7 +39,7 @@ export const EventPage = () => {
   if (!event) {
     return (
       <Center minHeight={"100vh"}>
-        <Heading>Event niet gevonden!</Heading>
+        <Heading>Event not found!</Heading> 21 3 0``
       </Center>
     );
   }
@@ -86,14 +88,11 @@ export const EventPage = () => {
                   .map((category) => (
                     <Tag
                       key={category.id}
-                      size={"lg"}
+                      size={"xl"}
+                      w={"fit-content"}
                       bg={"purple.700"}
-                      border={"none"}
-                      outline={"none"}
+                      textAlign={"center"}
                       boxShadow={"none"}
-                      display={"flex"}
-                      alignItems={"center"}
-                      justifyContent={"center"}
                     >
                       {category.name}
                     </Tag>
@@ -102,8 +101,19 @@ export const EventPage = () => {
             </Stack>
           </CardBody>
           <CardFooter bg={"purple.300"} p={4} borderBottomRadius={25}>
-            <EditEvent event={event} />
-            <DeleteEvent event={event} />
+            <Flex
+              flexDir={"row"}
+              justifyContent={"flex-start"}
+              alignItems={"center"}
+              w={"100%"}
+              gap={2}
+            >
+              <EditEvent event={event} />
+              <DeleteEvent event={event} />
+            </Flex>
+            <IconButton onClick={() => navigate("/")}>
+              <FaHome />
+            </IconButton>
           </CardFooter>
         </Card.Root>
       </Flex>
