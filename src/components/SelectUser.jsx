@@ -1,10 +1,4 @@
-import {
-  SelectItem,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
-  SelectContent,
-} from "@chakra-ui/react";
+import { Select } from "@chakra-ui/react";
 import { useState } from "react";
 import { useUser } from "../context/UserContext";
 
@@ -13,8 +7,8 @@ export const SelectUser = ({ setSelectedUserId }) => {
   const { users } = useUser();
 
   const handleUserChange = (userId, userName) => {
-    if (!userId || !userName) {
-      console.error("Invalid userId or userName");
+    if (!userId) {
+      console.error("Invalid userId ");
       return;
     }
     setSelectedUserId(userId);
@@ -22,24 +16,23 @@ export const SelectUser = ({ setSelectedUserId }) => {
   };
 
   return (
-    <SelectRoot variant={"subtle"}>
+    <Select.Root variant={"subtle"}>
       {/* <SelectLabel></SelectLabel> */}
-      <SelectTrigger>
-        <SelectValueText placeholder={selectedUserName || "select user"} />
-      </SelectTrigger>
-      <SelectContent>
+      <Select.Trigger>
+        <Select.ValueText placeholder={selectedUserName || "select user"} />
+      </Select.Trigger>
+      <Select.Content>
         {users.map((user) => (
-          <SelectItem
+          <Select.Item
             key={user.id}
-            value={user.name}
+            value={user.id}
             item={user.name}
-            // selected={selectedUserName === user.name}
             onClick={() => handleUserChange(user.id, user.name)}
           >
             {user.name}
-          </SelectItem>
+          </Select.Item>
         ))}
-      </SelectContent>
-    </SelectRoot>
+      </Select.Content>
+    </Select.Root>
   );
 };

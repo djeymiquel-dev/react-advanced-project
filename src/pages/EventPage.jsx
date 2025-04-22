@@ -39,7 +39,9 @@ export const EventPage = () => {
   if (!event) {
     return (
       <Center minHeight={"100vh"}>
-        <Heading>Event not found!</Heading> 21 3 0``
+        <Heading as={"h1"} fontSize={"2rem"}>
+          Event not found!
+        </Heading>
       </Center>
     );
   }
@@ -48,19 +50,18 @@ export const EventPage = () => {
     <>
       <Flex justifyContent={"center"} alignItems={"center"} mt={8}>
         <Card.Root
-          w={["sm", "xl"]}
+          w={["sm", "md"]}
           h={"lg"}
           bg={"purple.300"}
-          borderRadius={25}
+          borderRadius={22}
         >
           <Image
             src={event.image}
             objectFit={"cover"}
             width="100%"
-            height={"18rem"}
-            borderTopRadius={25}
+            height={"14rem"}
+            borderTopRadius={20}
           />
-
           <CardBody bg={"purple.500"}>
             <Stack gap={4}>
               {users.map((user) =>
@@ -76,7 +77,9 @@ export const EventPage = () => {
                   </Box>
                 ) : null
               )}
-              <Heading size={"xl"}>{event.title}</Heading>
+              <Heading as={"h1"} fontSize={"2rem"}>
+                {event.title}
+              </Heading>
               <Text fontSize={"xl"}>{event.description}</Text>
               <Flex flexDir={"column"} gap={2}>
                 <Text fontSize={"xl"}>Start: {formattedStartTime(event)}</Text>

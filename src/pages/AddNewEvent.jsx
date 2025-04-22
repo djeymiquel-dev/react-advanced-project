@@ -12,29 +12,17 @@ import {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Field } from "../components/ui/field";
-// import { UserContext } from "../context/UserContext";
 import { SelectUser } from "../components/SelectUser";
 import { useNavigate, useNavigation, useRevalidator } from "react-router-dom";
 import { toaster } from "../components/ui/toaster";
 import { AddNewEventSelectCategory } from "../components/AddNewEventSelectCategory";
-// import { CategoryContext } from "../context/CategoryContext";
 
 export const AddNewEvent = () => {
-  // const { categories } = useContext(CategoryContext);
-  // const { users } = useContext(UserContext);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const navigate = useNavigate();
   const navigation = useNavigation();
   const revalidator = useRevalidator();
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const imageUrl = watch("image");
 
   // Maak een JSON-object van het formulier
   const onSubmit = async (data) => {
@@ -96,6 +84,14 @@ export const AddNewEvent = () => {
     });
   };
 
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const imageUrl = watch("image");
+
   return (
     <Center minHeight={"100vh"} bg={"purple.500"} flexDir={"column"}>
       <Heading size={"3xl"} color={"white"}>
@@ -117,17 +113,33 @@ export const AddNewEvent = () => {
 
             <Input
               variant={"subtle"}
-              {...register("title")}
+              {...register("title", {
+                maxLength: {
+                  value: 50,
+                  message: "Title must be at most 50 characters",
+                },
+                required: {
+                  value: true,
+                  message: "Title is required",
+                },
+              })}
               placeholder="event name..."
             />
             {errors.title && <p>{errors.title.message}</p>}
             <Textarea
               variant={"subtle"}
-              {...register("description")}
+              {...register("description", {
+                maxLength: 150,
+                required: {
+                  value: true,
+                  message: "Description is required",
+                },
+              })}
               placeholder="description..."
               rows={4}
               cols={50}
             />
+            {errors.description && <p>{errors.description.message}</p>}
             <Input
               type="url"
               variant={"subtle"}
@@ -136,26 +148,19 @@ export const AddNewEvent = () => {
                   value: /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i,
                   message: "Please enter a valid URL",
                 },
+                required: {
+                  value: true,
+                  message: "Image URL is required",
+                },
               })}
               placeholder="enter image URL..."
             />
             {/* Validatiefouten weergeven */}
-            {errors.image && (
-              <p style={{ color: "red" }}>{errors.image.message}</p>
-            )}
+            {errors.image && <p>{errors.image.message}</p>}
             {/* Optionele afbeelding preview */}
             {imageUrl && (
               <div style={{ marginTop: "10px" }}>
-                <Image
-                  src={imageUrl}
-                  alt="Preview"
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "200px",
-                    objectFit: "contain",
-                    border: "1px solid #ccc",
-                  }}
-                />
+                <Image src={imageUrl} alt="Preview" maxWidth={"100%"} />
               </div>
             )}
             {/* category component */}
@@ -168,17 +173,29 @@ export const AddNewEvent = () => {
                 <Input
                   id="startTime"
                   type="datetime-local"
-                  {...register("startTime", { required: true })}
+                  {...register("startTime", {
+                    required: {
+                      value: true,
+                      message: "Start time is required",
+                    },
+                  })}
                   variant={"subtle"}
                 />
+                {errors.startTime && <p>{errors.startTime.message}</p>}
               </Field>
               <Field label="Endtime">
                 <Input
                   id="endTime"
                   type="datetime-local"
-                  {...register("endTime", { required: true })}
+                  {...register("endTime", {
+                    required: {
+                      value: true,
+                      message: "End time is required",
+                    },
+                  })}
                   variant={"subtle"}
                 />
+                {errors.endTime && <p>{errors.endTime.message}</p>}
               </Field>
             </Flex>
             <Button type="submit" isLoading={navigation.state === "submitting"}>

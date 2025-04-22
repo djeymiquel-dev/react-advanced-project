@@ -14,7 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import { useLoaderData, Link } from "react-router-dom";
 import { useCategory } from "../context/CategoryContext";
-import { Tag } from "../components/ui/tag";
+
 import { SearchComponent } from "../components/SearchEventFilter";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { formattedStartTime, formattedEndTime } from "../helpers/formattedTime";
@@ -66,40 +66,57 @@ export const EventsPage = () => {
       {isLoading ? (
         <Center minHeight={"100vh"} flexDir={"column"}>
           <Flex>
-            <Text fontSize={"4xl"}>Loading...</Text>
+            <Heading as={"h1"} fontSize={"2rem"}>
+              Loading...
+            </Heading>
           </Flex>
         </Center>
       ) : (
         <Stack>
           <Box>
             <Flex
-              flexDir={["column", "row"]}
-              justifyContent={"center"}
+              flexDir={"row"}
+              alignItems={"center"}
+              justifyContent={["flex-start", "flex-start", "center"]}
+              p={4}
               gap={4}
-              px={8}
-              py={4}
             >
               <ErrorBoundary fallback="Dit is een error voor Search component">
-                <SelectCategoryFilter
-                  CallbackFN={handleCategoryChange}
-                  selectedCategory={selectedCategory}
-                />
-
-                <SearchComponent
-                  clickFn={handleSearchChange}
-                  width={["xs", "md"]}
-                />
+                {/* <Flex
+                  w={"100vw"}
+                  flexDir={"row"}
+                  gap={4}
+                  p={2}
+                  alignItems={"center"}
+                  justifyContent={["flex-start", "center"]}
+                  border={"1px solid yellow"}
+                > */}
+                <Box>
+                  <SelectCategoryFilter
+                    CallbackFN={handleCategoryChange}
+                    selectedCategory={selectedCategory}
+                  />
+                </Box>
+                <Box>
+                  <SearchComponent clickFn={handleSearchChange} />
+                </Box>
+                {/* </Flex> */}
               </ErrorBoundary>
             </Flex>
             <Center
               minHeight={"100vh"}
               flexDir={"column"}
               bg={"pink.300"}
-              p={8}
+              pt={4}
+              pb={4}
             >
               {matchedEvents.length === 0 ? (
-                <Heading size={"4xl"} textAlign={"center"}>
-                  No events found
+                <Heading
+                  as={"h1"}
+                  fontSize={["2rem", "3rem"]}
+                  textAlign={"center"}
+                >
+                  No events found!
                 </Heading>
               ) : (
                 <Grid
@@ -114,13 +131,12 @@ export const EventsPage = () => {
                   {matchedEvents.map((event) => (
                     <Link to={`/event/${event.id}`} key={event.id}>
                       <Card.Root
-                        w={["xs"]}
-                        height={["md"]}
+                        size={["sm", "md"]}
+                        w={"xs"}
                         boxShadow={"xl"}
                         borderRadius={20}
                         bg={"purple.500"}
                         border="none"
-                        outline="none"
                       >
                         <Image
                           src={event.image}
@@ -129,28 +145,41 @@ export const EventsPage = () => {
                           borderBottomRadius={0}
                         />
                         <CardBody>
-                          <Heading textAlign={"start"}>{event.title}</Heading>
-                          <Text mt={2}>{event.description}</Text>
-                          <Flex flexDir={"column"} mt={2}>
-                            <Text>{formattedStartTime(event)}</Text>
-                            <Text>{formattedEndTime(event)}</Text>
-                          </Flex>
-                          <Flex flexDir={"row"} gap={2} flexWrap="wrap" mt={2}>
-                            {event.categoryIds.map((id, index) => (
-                              <Tag
-                                key={index}
-                                bg={"purple.700"}
-                                border={"none"}
-                                outline={"none"}
-                                boxShadow={"none"}
-                                display={"flex"}
-                                alignItems={"center"}
-                                justifyContent={"center"}
+                          <Stack spaceX={4}>
+                            <Flex
+                              flexDir={"column"}
+                              justifyContent={"flex-start"}
+                            >
+                              <Heading textAlign={"start"} size={"xl"}>
+                                {event.title}
+                              </Heading>
+                              <Text textAlign={"start"} mt={2} fontSize={"md"}>
+                                {event.description}
+                              </Text>
+                              <Flex flexDir={"column"} mt={2}>
+                                <Text>{formattedStartTime(event)}</Text>
+                                <Text>{formattedEndTime(event)}</Text>
+                              </Flex>
+                              <Flex
+                                flexDir={"row"}
+                                gap={2}
+                                flexWrap="wrap"
+                                mt={2}
                               >
-                                {categoryId(id)?.name}
-                              </Tag>
-                            ))}
-                          </Flex>
+                                {event.categoryIds.map((id, index) => (
+                                  <Box
+                                    key={index}
+                                    bg={"purple.700"}
+                                    borderRadius={5}
+                                    fontSize={"sm"}
+                                    p={1}
+                                  >
+                                    {categoryId(id)?.name}
+                                  </Box>
+                                ))}
+                              </Flex>
+                            </Flex>
+                          </Stack>
                         </CardBody>
                       </Card.Root>
                     </Link>

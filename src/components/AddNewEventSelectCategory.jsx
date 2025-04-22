@@ -6,7 +6,6 @@ export const AddNewEventSelectCategory = ({
   handleCategoryChange,
 }) => {
   const { categories } = useCategory();
-  console.log("categories", categories);
 
   // Haal de namen van de geselecteerde categorieën op
   const selectedCategoryNames = categories
@@ -16,6 +15,7 @@ export const AddNewEventSelectCategory = ({
   return (
     <>
       <Select.Root
+        required={true}
         multiple
         size="sm"
         positioning={{ placement: "top" }}
