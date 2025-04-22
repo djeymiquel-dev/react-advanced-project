@@ -64,6 +64,18 @@
       "location": "Shavasana Yoga School",
       "startTime": "2023-03-09T06:00:00.000Z",
       "endTime": "2023-03-09T07:00:00.000Z"
+    },
+    {
+      "createdBy": 1,
+      "title": "sadasdsad",
+      "description": "asddasd",
+      "image": "https://bs-uploads.toptal.io/blackfish-uploads/components/blog_post_page/5992673/cover_image/retina_1708x683/1005_Design-Patterns-in-React_Cover-44247834a5b31e8d08e5bbbdac4a6750.png",
+      "categoryIds": [
+        1
+      ],
+      "startTime": "2025-04-26T03:30:00.000Z",
+      "endTime": "2025-05-08T06:33:00.000Z",
+      "id": 5
     }
   ],
   "categories": [

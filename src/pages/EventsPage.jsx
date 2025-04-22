@@ -82,15 +82,6 @@ export const EventsPage = () => {
               gap={4}
             >
               <ErrorBoundary fallback="Dit is een error voor Search component">
-                {/* <Flex
-                  w={"100vw"}
-                  flexDir={"row"}
-                  gap={4}
-                  p={2}
-                  alignItems={"center"}
-                  justifyContent={["flex-start", "center"]}
-                  border={"1px solid yellow"}
-                > */}
                 <Box>
                   <SelectCategoryFilter
                     CallbackFN={handleCategoryChange}
@@ -100,13 +91,12 @@ export const EventsPage = () => {
                 <Box>
                   <SearchComponent clickFn={handleSearchChange} />
                 </Box>
-                {/* </Flex> */}
               </ErrorBoundary>
             </Flex>
             <Center
               minHeight={"100vh"}
               flexDir={"column"}
-              bg={"pink.300"}
+              bg={"purple.500"}
               pt={4}
               pb={4}
             >
@@ -135,7 +125,7 @@ export const EventsPage = () => {
                         w={"xs"}
                         boxShadow={"xl"}
                         borderRadius={20}
-                        bg={"purple.500"}
+                        // bg={"purple.500"}
                         border="none"
                       >
                         <Image
@@ -169,7 +159,7 @@ export const EventsPage = () => {
                                 {event.categoryIds.map((id, index) => (
                                   <Box
                                     key={index}
-                                    bg={"purple.700"}
+                                    bg={"purple.600"}
                                     borderRadius={5}
                                     fontSize={"sm"}
                                     p={1}

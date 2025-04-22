@@ -23,6 +23,7 @@ export const SearchComponent = ({ clickFn }) => {
 
           {isSelectOpen && (
             <Input
+              css={{ "--focus-color": "purple.700" }}
               size={"sm"}
               width={"16rem"}
               type="text"
@@ -33,7 +34,7 @@ export const SearchComponent = ({ clickFn }) => {
               boxShadow={"lg"}
               borderRadius={20}
               _focus={{
-                bgColor: "gray.200", // Achtergrondkleur bij focus
+                bg: "gray.200", // Achtergrondkleur bij focus
               }}
             />
           )}

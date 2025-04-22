@@ -14,6 +14,8 @@ import {
   Stack,
   Text,
   Flex,
+  Box,
+  Image,
 } from "@chakra-ui/react";
 import { CloseButton } from "./ui/close-button";
 import { useForm } from "react-hook-form";
@@ -28,6 +30,7 @@ import { LuPencil } from "react-icons/lu";
 
 export const EditEvent = ({ event }) => {
   const submit = useSubmit();
+
   const navigation = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,6 +38,7 @@ export const EditEvent = ({ event }) => {
     reset,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -45,6 +49,7 @@ export const EditEvent = ({ event }) => {
       image: event?.image || "",
     },
   });
+  const imageUrl = watch("image");
 
   // Reset het formulier wanneer de event prop verandert
   useEffect(() => {
@@ -84,129 +89,147 @@ export const EditEvent = ({ event }) => {
   };
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <IconButton _hover={hover}>
-          <LuPencil />
-        </IconButton>
-      </DialogTrigger>
-      <Portal>
-        <DialogBackdrop />
-        <DialogPositioner>
-          <DialogContent>
-            <DialogHeader>
-              <Flex
-                flexDir={"row"}
-                w={"100%"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-              >
-                <DialogTitle>Edit Event</DialogTitle>
-                <CloseButton
-                  variant="ghost"
-                  _hover={hover}
-                  onClick={() => {
-                    setIsOpen(false);
-                    reset();
-                  }}
-                />
-              </Flex>
-            </DialogHeader>
-            <DialogBody>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Stack spacing={4}>
-                  <div>
-                    <Text mb={2}>Event Title</Text>
-                    <Input
-                      id="title"
-                      {...register("title")}
-                      placeholder="Event title"
-                    />
-                    {errors.title && (
-                      <Text color="red.500">{errors.title.message}</Text>
-                    )}
-                  </div>
-
-                  <div>
-                    <Text mb={2}>Description</Text>
-                    <Textarea
-                      id="description"
-                      {...register("description")}
-                      placeholder="Event description"
-                    />
-                    {errors.description && (
-                      <Text color="red.500">{errors.description.message}</Text>
-                    )}
-                  </div>
-
-                  <div>
-                    <Text mb={2}>Start Time</Text>
-                    <Input
-                      id="startTime"
-                      type="datetime-local"
-                      {...register("startTime")}
-                      placeholder="Event starttime"
-                    />
-                    {errors.startTime && (
-                      <Text color="red.500">{errors.startTime.message}</Text>
-                    )}
-                  </div>
-
-                  <div>
-                    <Text mb={2}>End Time</Text>
-                    <Input
-                      id="endTime"
-                      type="datetime-local"
-                      {...register("endTime")}
-                    />
-                    {errors.endTime && (
-                      <Text color="red.500">{errors.endTime.message}</Text>
-                    )}
-                  </div>
-
-                  <div>
-                    <Text mb={2}>Image URL</Text>
-                    <Input
-                      id="image"
-                      {...register("image")}
-                      placeholder="Image URL"
-                    />
-                    {errors.image && (
-                      <Text color="red.500">{errors.image.message}</Text>
-                    )}
-                  </div>
-                </Stack>
-                <DialogFooter
-                  display={"flex"}
-                  justifyContent={"flex-start"}
+    <>
+      <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <IconButton _hover={hover}>
+            <LuPencil />
+          </IconButton>
+        </DialogTrigger>
+        <Portal>
+          <DialogBackdrop />
+          <DialogPositioner>
+            <DialogContent>
+              <DialogHeader>
+                <Flex
+                  flexDir={"row"}
+                  w={"100%"}
+                  justifyContent={"space-between"}
                   alignItems={"center"}
-                  mt={4}
-                  p={0}
                 >
-                  <Button
-                    variant="outline"
+                  <DialogTitle>Edit Event</DialogTitle>
+                  <CloseButton
+                    variant="ghost"
                     _hover={hover}
                     onClick={() => {
                       setIsOpen(false);
                       reset();
                     }}
+                  />
+                </Flex>
+              </DialogHeader>
+              <DialogBody>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <Stack spacing={4}>
+                    <Box>
+                      <Text mb={2}>Event Title</Text>
+                      <Input
+                        id="title"
+                        {...register("title")}
+                        placeholder="Event title"
+                      />
+                      {errors.title && (
+                        <Text color="red.500">{errors.title.message}</Text>
+                      )}
+                    </Box>
+
+                    <Box>
+                      <Text mb={2}>Description</Text>
+                      <Textarea
+                        id="description"
+                        {...register("description")}
+                        placeholder="Event description"
+                      />
+                      {errors.description && (
+                        <Text color="red.500">
+                          {errors.description.message}
+                        </Text>
+                      )}
+                    </Box>
+
+                    <Box>
+                      <Text mb={2}>Start Time</Text>
+                      <Input
+                        id="startTime"
+                        type="datetime-local"
+                        {...register("startTime")}
+                        placeholder="Event starttime"
+                      />
+                      {errors.startTime && (
+                        <Text color="red.500">{errors.startTime.message}</Text>
+                      )}
+                    </Box>
+
+                    <Box>
+                      <Text mb={2}>End Time</Text>
+                      <Input
+                        id="endTime"
+                        type="datetime-local"
+                        {...register("endTime")}
+                      />
+                      {errors.endTime && (
+                        <Text color="red.500">{errors.endTime.message}</Text>
+                      )}
+                    </Box>
+
+                    <Box>
+                      <Text mb={2}>Image URL</Text>
+                      <Input
+                        type="url"
+                        {...register("image", {
+                          pattern: {
+                            value: /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i,
+                            message: "Please enter a valid URL",
+                          },
+                        })}
+                        placeholder="Image URL"
+                      />
+                      {errors.image && (
+                        <Text color="red.500">{errors.image.message}</Text>
+                      )}
+                      {imageUrl && (
+                        <Box style={{ marginTop: "10px" }}>
+                          <Image
+                            src={imageUrl}
+                            alt="Preview"
+                            maxWidth={"50%"}
+                          />
+                        </Box>
+                      )}
+                    </Box>
+                  </Stack>
+                  <DialogFooter
+                    display={"flex"}
+                    justifyContent={"flex-start"}
+                    alignItems={"center"}
+                    mt={4}
+                    p={0}
                   >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="outline"
-                    type="submit"
-                    isLoading={navigation.state === "submitting"}
-                    _hover={hover}
-                  >
-                    Save Changes
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogBody>
-          </DialogContent>
-        </DialogPositioner>
-      </Portal>
-    </Dialog.Root>
+                    <Button
+                      variant="outline"
+                      _hover={hover}
+                      onClick={() => {
+                        setIsOpen(false);
+                        reset();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="outline"
+                      type="submit"
+                      isLoading={navigation.state === "submitting"}
+                      _hover={hover}
+                    >
+                      Save Changes
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogBody>
+            </DialogContent>
+          </DialogPositioner>
+        </Portal>
+      </Dialog.Root>
+    </>
   );
 };

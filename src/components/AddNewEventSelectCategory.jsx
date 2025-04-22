@@ -1,4 +1,4 @@
-import { Select } from "@chakra-ui/react";
+import { Select, Box } from "@chakra-ui/react";
 import { useCategory } from "../context/CategoryContext";
 
 export const AddNewEventSelectCategory = ({
@@ -24,10 +24,15 @@ export const AddNewEventSelectCategory = ({
       >
         <Select.Control>
           <Select.Trigger>
-            <Select.ValueText placeholder={"select 1 or more categories"}>
-              {selectedCategoryNames.length > 0
-                ? selectedCategoryNames.join(", ") // Toon de namen van de geselecteerde categorieën
-                : "select 1 or more categories"}{" "}
+            <Select.ValueText placeholder={"Categories"}>
+              {selectedCategoryNames.length > 0 ? (
+                <>
+                  {<Box>{selectedCategoryNames.join(", ")}</Box>}
+                  {/* // Toon de namen van de geselecteerde categorieën */}
+                </>
+              ) : (
+                "Categories"
+              )}{" "}
             </Select.ValueText>
           </Select.Trigger>
           <Select.IndicatorGroup>

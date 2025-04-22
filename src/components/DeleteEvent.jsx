@@ -25,7 +25,7 @@ export const DeleteEvent = ({ event }) => {
 
   const handleDelete = async () => {
     try {
-      await submit(null, {
+      submit(null, {
         method: "DELETE",
         action: `/event/${event.id}/delete`,
       });
@@ -34,7 +34,10 @@ export const DeleteEvent = ({ event }) => {
         description: "Event deleted successfully",
         type: "success",
       });
-
+      // verwijder de deleted event van de homepage state
+      const eventList = JSON.parse(localStorage.getItem("events")) || [];
+      const updatedEventList = eventList.filter((e) => e.id !== event.id);
+      localStorage.setItem("events", JSON.stringify(updatedEventList));
       setIsOpen(false);
       navigate("/", { replace: true });
     } catch (error) {
@@ -45,7 +48,7 @@ export const DeleteEvent = ({ event }) => {
     }
   };
 
-  const hover = {
+  const hover = { 
     background: "red.500",
     color: "white",
   };

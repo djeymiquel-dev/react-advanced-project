@@ -44,7 +44,6 @@ export const SelectCategoryFilter = ({ CallbackFN, selectedCategory }) => {
               size={"sm"}
               value={selectedCategory || []} // Zorg ervoor dat dit een array is
               onValueChange={(value) => CallbackFN(value)} // Zorg dat alleen een list wordt doorgegeven
-              colorPalette={"purple"}
             >
               <Select.Control>
                 <Select.Trigger cursor={"pointer"} w={"10rem"}>

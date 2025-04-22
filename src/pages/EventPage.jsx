@@ -11,6 +11,7 @@ import {
   Stack,
   Text,
   IconButton,
+  CardHeader,
 } from "@chakra-ui/react";
 import { useLoaderData, useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -18,7 +19,6 @@ import { formattedStartTime, formattedEndTime } from "../helpers/formattedTime";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { CategoryContext } from "../context/CategoryContext";
-import { Tag } from "../components/ui/tag";
 import { EditEvent } from "../components/EditEvent";
 import { DeleteEvent } from "../components/DeleteEvent";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,7 @@ export const EventPage = () => {
   const event = events.find((e) => e.id.toString() === eventId.toString());
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   }, []);
 
   if (!event) {
@@ -49,12 +49,7 @@ export const EventPage = () => {
   return (
     <>
       <Flex justifyContent={"center"} alignItems={"center"} mt={8}>
-        <Card.Root
-          w={["sm", "md"]}
-          h={"lg"}
-          bg={"purple.300"}
-          borderRadius={22}
-        >
+        <Card.Root borderRadius={20}>
           <Image
             src={event.image}
             objectFit={"cover"}
@@ -62,21 +57,29 @@ export const EventPage = () => {
             height={"14rem"}
             borderTopRadius={20}
           />
-          <CardBody bg={"purple.500"}>
+          <CardHeader p={0}>
+            {users.map((user) =>
+              user.id === event.createdBy ? (
+                <Box
+                  key={user.id}
+                  w={"100%"}
+                  px={8}
+                  py={4}
+                  bg={"whiteAlpha.100"}
+                >
+                  <Image
+                    type={"url"}
+                    src={user.image}
+                    borderRadius={"full"}
+                    boxSize={20}
+                  />
+                  <Text fontSize={"1.2rem"}>{user.name}</Text>
+                </Box>
+              ) : null
+            )}
+          </CardHeader>
+          <CardBody>
             <Stack gap={4}>
-              {users.map((user) =>
-                user.id === event.createdBy ? (
-                  <Box key={user.id}>
-                    <Image
-                      type={"url"}
-                      src={user.image}
-                      borderRadius={"full"}
-                      boxSize={20}
-                    />
-                    <Text>{user.name}</Text>
-                  </Box>
-                ) : null
-              )}
               <Heading as={"h1"} fontSize={"2rem"}>
                 {event.title}
               </Heading>
@@ -89,16 +92,17 @@ export const EventPage = () => {
                 {categories
                   .filter((category) => event.categoryIds.includes(category.id))
                   .map((category) => (
-                    <Tag
+                    <Flex
                       key={category.id}
-                      size={"xl"}
-                      w={"fit-content"}
                       bg={"purple.700"}
-                      textAlign={"center"}
-                      boxShadow={"none"}
+                      borderRadius={5}
+                      justifyContent={"center"}
+                      alignItems={"center"}
                     >
-                      {category.name}
-                    </Tag>
+                      <Text fontSize={"1rem"} textAlign={"center"} p={1.5}>
+                        {category.name}
+                      </Text>
+                    </Flex>
                   ))}
               </Flex>
             </Stack>
