@@ -40,7 +40,6 @@ export const SelectCategoryFilter = ({ CallbackFN, selectedCategory }) => {
           </IconButton>
           {isSelectOpen && (
             <Select.Root
-              // w={isSmallScreen ? "auto" : "10rem"}
               size={"sm"}
               value={selectedCategory || []} // Zorg ervoor dat dit een array is
               onValueChange={(value) => CallbackFN(value)} // Zorg dat alleen een list wordt doorgegeven
