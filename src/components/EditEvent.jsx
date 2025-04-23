@@ -97,7 +97,7 @@ export const EditEvent = ({ event }) => {
           </IconButton>
         </DialogTrigger>
         <Portal>
-          <DialogBackdrop />
+          <DialogBackdrop bg={"purple.500"} />
           <DialogPositioner>
             <DialogContent>
               <DialogHeader>

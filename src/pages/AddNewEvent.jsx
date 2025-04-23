@@ -110,7 +110,6 @@ export const AddNewEvent = () => {
             gap={4}
             w={["xs", "md"]}
             borderRadius={10}
-            // border={"1px solid whitesmoke"}
             bg={"purple.500"}
           >
             <Stack gap={4}>

@@ -121,8 +121,7 @@ export const EventsPage = () => {
                   {matchedEvents.map((event) => (
                     <Link to={`/event/${event.id}`} key={event.id}>
                       <Card.Root
-                        size={["sm", "md"]}
-                        w={"xs"}
+                        size={["md", "lg"]}
                         boxShadow={"xl"}
                         borderRadius={20}
                         // bg={"purple.500"}

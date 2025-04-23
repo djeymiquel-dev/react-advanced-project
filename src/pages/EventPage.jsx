@@ -49,7 +49,7 @@ export const EventPage = () => {
   return (
     <>
       <Flex justifyContent={"center"} alignItems={"center"} mt={8}>
-        <Card.Root borderRadius={20}>
+        <Card.Root borderRadius={20} w={["sm", "md", "lg"]}>
           <Image
             src={event.image}
             objectFit={"cover"}
